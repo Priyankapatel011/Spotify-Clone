@@ -1,0 +1,60 @@
+.border {
+    /* border: 2px solid rgb(231, 231, 231); */
+    margin: 3px;
+}
+
+.left {
+    width: 21vw;
+    /* padding: 14px; */
+    /* margin: 8px; */
+}
+
+.right {
+    width: 80vw;
+    color: white;
+    /* margin: 8px; */
+    position: relative;
+}
+
+.flex {
+    display: flex;
+}
+
+.bg-gray {
+    background-color: #121212;
+    color: white;
+}
+
+.bg-black {
+    background-color: black;
+}
+
+.invert {
+    filter: invert(1);
+}
+
+.rounded {
+    border-radius: 7px;
+}
+
+.m-1 {
+    margin: 5px;
+}
+
+.p-1 {
+    padding: 10px;
+}
+
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 12px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background-color: #333; /* Set the color of the thumb (the draggable part) */
+}
+  
+::-webkit-scrollbar-track {
+    background-color: #555; /* Set the color of the track (the non-draggable part) */
+}
