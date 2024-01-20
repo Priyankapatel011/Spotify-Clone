@@ -1,8 +1,9 @@
 let currentSong = new Audio();
+let songs;
 
 function secToMinSec(seconds) {
     if(isNaN(seconds) || seconds < 0){
-        return "Invalid input";
+        return "00 : 00";
     }
 
     const minutes = Math.floor(seconds / 60);
@@ -42,7 +43,7 @@ async function getSongs() {
 
 const playMusic = (track, pause = false) => {  // by default
     
-    currentSong.src = "./songs/" + track;
+    currentSong.src = "songs/" + track;
     // currentSong.play();
 
     if(!pause){
@@ -74,7 +75,7 @@ const playMusic = (track, pause = false) => {  // by default
 async function main() {
 
     //get the list of all the songs
-    let songs = await getSongs();
+    songs = await getSongs();
     // console.log(songs);
     
     playMusic(songs[0], true);
@@ -118,14 +119,17 @@ async function main() {
 
         
         e.addEventListener("click", element => {
-            console.log(e.querySelector(".info").firstElementChild.innerHTML.trim());
+            // console.log(e.querySelector(".info").firstElementChild.innerHTML.trim());
             playMusic(e.querySelector(".info").firstElementChild.innerHTML.trim());
         })
     });
 
-    //attach an event listener to play next and previous
+    //attach an event listener to play the player
 
     player.addEventListener("click", () => {
+        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        console.log(songs, index);
+
         if(currentSong.paused){
             currentSong.play();
             player.src = "pause.svg";
@@ -139,7 +143,7 @@ async function main() {
 
     //listen for timeupdate event
     currentSong.addEventListener("timeupdate", () => {
-        console.log(currentSong.currentTime, currentSong.duration);
+        // console.log(currentSong.currentTime, currentSong.duration);
         document.querySelector(".songtime").innerHTML = `${secToMinSec(currentSong.currentTime)} / ${secToMinSec(currentSong.duration)}`;
 
         //seekbar change
@@ -157,11 +161,60 @@ async function main() {
         currentSong.currentTime = (currentSong.duration * percent) / 100;
     });
 
+    //add an event listener for hamburger
+    document.querySelector(".hamburger").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "0";
+    })
 
+    //add an event listener for cross
+    document.querySelector(".cross").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "-120%";
+    })
+
+
+    // add event listener to prev
+    prev.addEventListener("click", () => {
+        currentSong.pause();
+
+        // console.log("Prev Clicked");
+        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        if(index-1 >= 0){
+            console.log(songs, (index-1)%(songs.length));
+        }
+        else{
+            //index-1 < 0
+            console.log(songs, songs.length-1);
+        }
+
+        if((index-1) >= 0){
+            playMusic(songs[index - 1]);
+        }
+        else{
+            // curr song is at first
+            playMusic(songs[songs.length - 1]);
+        }
+
+
+    })
+
+    // add event listener to next
+    next.addEventListener("click", () => {
+        currentSong.pause();
+
+        // console.log("next Clicked");
+        // console.log(currentSong.src.split("/").slice(-1)[0]);
+        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        console.log(songs, (index+1)%(songs.length));
+
+        if((index+1) < songs.length){
+            playMusic(songs[index + 1]);
+        }
+        else{
+            // curr song is at last
+            playMusic(songs[0]);
+        }
+
+    })
 }
 
 main();
-
-
-
-
