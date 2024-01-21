@@ -23,6 +23,17 @@ body {
     align-items: center;
 }
 
+.logo-cross {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cross {
+    display: none;
+    font-size: 30px;
+}
+
 
 .home ul li {
     width: 22px;
@@ -83,6 +94,13 @@ body {
 .buttons {
     display: flex;
     gap: 20px;
+}
+
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .login {
@@ -191,7 +209,7 @@ body {
     bottom: 10px;
     background-color: #121212;
     width: 74%;
-    height: 20px;
+    min-height: 20px;
     padding: 12px;
     display: flex;
     justify-content: space-between;
@@ -205,6 +223,7 @@ body {
     position: absolute;
     bottom: 6px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .circle {
@@ -249,6 +268,10 @@ body {
     padding: 0 20px;
 }
 
+.hamburger {
+    display: none;
+}
+
 .song-list {
     height: 380px;
     overflow-y: auto;
@@ -290,5 +313,81 @@ body {
 
 .info {
     width: 154px;
+}
+
+
+@media screen and (max-width : 1400px) {
+
+    .container .left {
+        position: absolute;
+        left: -120%;
+        transition: all 0.3s;
+        z-index: 1;
+        width: 322px;
+    }    
+
+    .flex .right{
+        width: 100vw;
+    }
+
+    .playbar {
+        width: 95vw;
+    }
+
+    .hamburger {
+        display: block;
+        height: 35px;
+        margin-right: 25px;
+    }
+
+    .cross {
+        display: block;
+    }
+
+    .playbar {
+        width: 95vw;
+    }
+
+    .playbar .abovebar {
+        min-height: 30px;
+        padding: 5px;
+    }
+
+    .abovebar {
+        display: flex;
+        align-items: center;
+    }
+
+    .abovebar .songinfo {
+        width: 30px;
+    }
+
+    .songbuttons {
+        left: 40%;
+        bottom: 34px;
+    }
+
+}
+
+
+@media screen and (max-width : 600px) {
+    .playbar {
+        width: 86vw;
+    }
+    .songbuttons {
+        left: 32%;
+    }
+
+    .songinfo {
+        font-size: 14px;
+    }
+}
+
+
+
+@media screen and (max-width : 430px) {
+    .card {
+        width: 230px;
+    }
 }
 
