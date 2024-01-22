@@ -137,11 +137,11 @@ body {
     padding: 0px;
 }
 
-.inner {
+/* .inner {
     display: flex;
     justify-content: space-between;
     margin: 10px;
-}
+} */
 
 .spl {
     font-size: 30px;
@@ -168,8 +168,13 @@ body {
     /* background-color: #0e0e0e; */
     background: linear-gradient(#2c2a2a,#000000);
     border-radius: 5px;
-
     position: relative;
+}
+
+.card-container .card:hover{
+    background: none;
+    background-color: rgb(30, 3, 30);
+    cursor: pointer;
 }
 
 .card img {
@@ -197,11 +202,9 @@ body {
     transition: all 0.5s ease-out;
 }
 
-.card:hover {
-    .play-now {
-        opacity: 1;
-        bottom: 95px;
-    }
+.card:hover .play-now {
+    opacity: 1;
+    bottom: 95px;
 }
 
 .playbar {
@@ -254,6 +257,8 @@ body {
     justify-content: space-between;
     width: 98%;
     padding: 0 25px;
+    min-height: 30px;
+    align-items: center;
 }
 
 .songbuttons {
@@ -261,7 +266,7 @@ body {
     cursor: pointer;
     position: fixed;
     left: 53%;
-    bottom: 23px;
+    bottom: 27px;
 }
 
 .songbuttons img {
@@ -286,6 +291,7 @@ body {
 
     list-style-type: decimal;
     display: flex;
+    /* justify-content: space-between; */
     gap: 6px;
     cursor: pointer;
     padding: 12px 10px;
@@ -311,8 +317,29 @@ body {
     font-size: 33px;
 }
 
-.info {
-    width: 154px;
+li .info {
+    width: 200px;
+    word-break: break-all;
+}
+
+.time-vol {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    justify-content: space-around;
+}
+
+.volume{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    padding-left: 10px;
+}
+
+.range input{
+    cursor: pointer;
+    margin-left: 10px;
 }
 
 
@@ -348,15 +375,10 @@ body {
         width: 95vw;
     }
 
-    .playbar .abovebar {
-        min-height: 30px;
-        padding: 5px;
-    }
-
-    .abovebar {
+    /* .abovebar {
         display: flex;
         align-items: center;
-    }
+    } */
 
     .abovebar .songinfo {
         width: 30px;
@@ -385,9 +407,42 @@ body {
 
 
 
-@media screen and (max-width : 430px) {
+@media screen and (max-width : 440px) {
     .card {
         width: 230px;
     }
+    .playbar {
+        height: 110px;
+        width: 91%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .abovebar {
+        flex-direction: column;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .abovebar .songinfo {
+        width: 205px;
+        padding: 5px;
+    }
+
+    .songbuttons {
+        left: 24%;
+        bottom: 62px;
+    }
+
+    .songtime {
+        margin-top: 24px;
+    }
+
+    .time-vol {
+        flex-direction: column;
+        justify-content: center;
+    }
+
 }
 
