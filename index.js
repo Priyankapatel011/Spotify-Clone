@@ -41,6 +41,7 @@ async function getSongs(folder) {
     // console.log(songs);
     // return songs;
 
+
     //show all the songs in the playlist
     let songList = document.querySelector(".song-list");
     let ul = songList.getElementsByTagName("ul")[0];
@@ -54,14 +55,14 @@ async function getSongs(folder) {
         // ul.innerHTML = ul.innerHTML + `<li> ${song.replaceAll("%", " ")} </li>`
 
         ul.innerHTML = ul.innerHTML + `<li> 
-                                            <img src="music.svg" alt="music" class="invert">
+                                            <img src="img/music.svg" alt="music" class="invert">
                                             <div class="info">
                                                 <div>${song.replaceAll("%", "-")}</div>
                                                 <div>XYZW</div>
                                             </div>
                                             <div class="playnow">
                                                 <span>Play now</span>
-                                                <img src="playnow.svg" alt="play" class="invert">
+                                                <img src="img/playnow.svg" alt="play" class="invert">
                                             </div>
                                     </li>`
     }
@@ -86,6 +87,8 @@ async function getSongs(folder) {
         })
     });
 
+    return songs;
+
 }
 
 const playMusic = (track, pause = false) => {  // by default
@@ -95,7 +98,7 @@ const playMusic = (track, pause = false) => {  // by default
 
     if(!pause){
         currentSong.play();
-        player.src = "pause.svg";
+        player.src = "img/pause.svg";
     }
 
 
@@ -127,12 +130,43 @@ async function displayAlbums() {
     // console.log(div);
 
     let anchors = div.getElementsByTagName("a");
-    Array.from(anchors).forEach((e) => {
+    let cardContainer = document.querySelector(".card-container");
+
+    // Array.from(anchors).forEach(async (e) => {
+    let array = Array.from(anchors);
+    for (let index = 0; index < array.length; index++) {
+        const e = array[index];
+        
         // console.log(e.href);
-        if(e.href.includes("/songs")){
+        if(e.href.includes("/songs") && !e.href.includes(".htaccess")){
             // console.log(e.href);
-            console.log(e.href.split("/").slice(-2)[0]);
+            // console.log(e.href.split("/").slice(-2)[0]);
+            let folder = e.href.split("/").slice(-2)[0];
+            //get the metadata of the folder
+            let a = await fetch(`http://127.0.0.1:3000/SPOTIFY-PROJECT%F0%9F%98%80/songs/${folder}/info.json`);
+            let response = await a.json();
+            // console.log(response);
+
+            cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="card">
+                    <img src="songs/${folder}/cover.jpg" alt="img">
+                    <div class="play-now">
+                        <img src="img/play.svg" alt="play" class="play">
+                    </div>
+                    <h3>${response.title}</h3>
+                    <p>${response.description}</p>
+                </div>`
         }
+    };
+
+
+    //load the playlist whenever card is clicked and also play the first song of that play list.
+    Array.from(document.getElementsByClassName("card")).forEach(e => {
+        e.addEventListener("click", async (item) => {
+            console.log(item.target, item.currentTarget.dataset);
+
+            songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
+            playMusic(songs[0]);
+        })
     });
 
 
@@ -159,11 +193,11 @@ async function main() {
 
         if(currentSong.paused){
             currentSong.play();
-            player.src = "pause.svg";
+            player.src = "img/pause.svg";
         }
         else{
             currentSong.pause();
-            player.src = "player.svg";
+            player.src = "img/player.svg";
         }
     })
 
@@ -205,13 +239,13 @@ async function main() {
 
         // console.log("Prev Clicked");
         let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
-        if(index-1 >= 0){
-            console.log(songs, (index-1)%(songs.length));
-        }
-        else{
-            //index-1 < 0
-            console.log(songs, songs.length-1);
-        }
+        // if(index-1 >= 0){
+        //     console.log(songs, (index-1)%(songs.length));
+        // }
+        // else{
+        //     //index-1 < 0
+        //     console.log(songs, songs.length-1);
+        // }
 
         if((index-1) >= 0){
             playMusic(songs[index - 1]);
@@ -231,7 +265,7 @@ async function main() {
         // console.log("next Clicked");
         // console.log(currentSong.src.split("/").slice(-1)[0]);
         let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
-        console.log(songs, (index+1)%(songs.length));
+        // console.log(songs, (index+1)%(songs.length));
 
         if((index+1) < songs.length){
             playMusic(songs[index + 1]);
@@ -245,20 +279,28 @@ async function main() {
     // add an event listener to volume
     document.querySelector(".range").getElementsByTagName("input")[0].addEventListener("change", (e) => {
         // console.log(e, e.target, e.target.value);
-        console.log("Setting volume to --> ", e.target.value ,"/100");
+        // console.log("Setting volume to --> ", e.target.value ,"/100");
         currentSong.volume = parseInt(e.target.value) / 100;
     })
 
 
-    //load the playlist whenever card is clicked
-    Array.from(document.getElementsByClassName("card")).forEach(e => {
-        e.addEventListener("click", async (item) => {
-            console.log(item.target, item.currentTarget.dataset);
+    // add an event listener to mute the track
+    document.querySelector(".volume>img").addEventListener("click", (e) => {
+        console.log(e.target);
+        console.log("changing", e.target.src);
 
-            songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-        })
-    });
+        if(e.target.src.includes("volume.svg")) {
+            e.target.src = e.target.src.replace("volume.svg", "mute.svg");
+            currentSong.volume = 0;
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 0;
+        }
 
+        else{
+            e.target.src = e.target.src.replace("mute.svg", "volume.svg");
+            currentSong.volume = 0.1;
+            document.querySelector(".range").getElementsByTagName("input")[0].value = 10;
+        }
+    })
 
 
 }
